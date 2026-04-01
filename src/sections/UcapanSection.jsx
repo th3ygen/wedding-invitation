@@ -30,7 +30,7 @@ export const UcapanSection = forwardRef(({ onWriteClick, onRSVPClick }, ref) => 
   }, [])
 
   return (
-    <section ref={ref} className="flex flex-col items-center justify-start h-screen px-4 pt-40 pb-[80px]">
+    <section ref={ref} className="flex flex-col items-center justify-start px-4 pt-40 pb-[80px]" style={{ height: '100dvh' }}>
       <p className="will-reveal text-xs tracking-[0.3em] text-primary mb-1">HEART TO HEART</p>
       <h2 className="will-reveal font-im-fell-english-regular-italic text-5xl text-secondary mb-2" style={{ transitionDelay: '0.08s' }}>Messages</h2>
       <div className="will-reveal w-16 h-px bg-[#c9a27e] mb-6" style={{ transitionDelay: '0.12s' }} />
@@ -57,7 +57,7 @@ export const UcapanSection = forwardRef(({ onWriteClick, onRSVPClick }, ref) => 
         </button>
         <button onClick={onRSVPClick}
           className="w-[75%] py-3 rounded-full text-sm tracking-widest text-white"
-          style={{ background: '#a0785a' }}>
+          style={{ background: '#fff', color: '#c9a27e', border: '1px solid #c9a27e' }}>
           ✉ Confirm Attendance
         </button>
       </div>

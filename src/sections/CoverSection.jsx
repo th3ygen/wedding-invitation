@@ -8,7 +8,7 @@ import topRight from '../assets/top-right.png'
 import botLeft from '../assets/bot-left.png'
 
 export const CoverSection = forwardRef((_, ref) => (
-  <section ref={ref} className="relative flex items-center justify-center min-h-screen bg-[#fcf0f0] overflow-hidden">
+  <section ref={ref} className="relative flex items-center justify-center bg-[#fcf0f0] overflow-hidden" style={{ minHeight: '100dvh' }}>
     <img src={frame} alt="Frame" className="w-[90%] h-auto md:w-[80%] lg:w-[70%] mx-auto -mt-[15%] md:-mt-[20%]" />
     <img src={flower} alt="" className="absolute top-0 left-0 w-24 md:w-32" />
     <img src={blueFlower} alt="" className="absolute top-1/2 left-0 w-20 md:w-28 -translate-y-1/2" />

@@ -125,7 +125,7 @@ lenis.on('scroll', () => checkReveals())
   }
 
   return (
-    <div className="desktop-backdrop flex items-center justify-center min-h-screen">
+    <div className="desktop-backdrop flex items-center justify-center" style={{ minHeight: '100dvh' }}>
       <img src={topRight}   className="desktop-floral desktop-floral-tr" alt="" />
       <img src={botLeft}    className="desktop-floral desktop-floral-bl" alt="" />
       <img src={flower}     className="desktop-floral desktop-floral-tl" alt="" />
