@@ -63,7 +63,8 @@ p {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
   overflow: hidden;
   z-index: 10;
-  background-image: url('./assets/bg.png');;
+  background-color: #ffffff;
+  background-image: url('./assets/bg.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

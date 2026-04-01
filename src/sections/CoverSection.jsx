@@ -76,6 +76,5 @@ export const CoverSection = forwardRef((_, ref) => (
 			</p>
 		</div>
 
-    <div className="absolute -bottom-40 left-0 w-100 h-12 bg-black-200">test</div>
 	</section>
 ));
