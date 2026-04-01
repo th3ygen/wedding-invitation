@@ -4,6 +4,9 @@ import img2 from '../assets/2.jpg'
 import img3 from '../assets/3.jpg'
 import img4 from '../assets/4.jpg'
 import img5 from '../assets/5.jpeg'
+import flower from '../assets/flower.png'
+import whiteFlower from '../assets/white-flower.png'
+import pinkFlower from '../assets/pink-flower.png'
 
 const GALLERY_IMAGES = [img1, img2, img3, img4, img5]
 const SLIDE_W = 280
@@ -12,7 +15,7 @@ const GAP = 16
 export const GallerySection = forwardRef((_, forwardedRef) => {
   const [index, setIndex] = useState(0)
   const [centerOffset, setCenterOffset] = useState(70)
-  const [drag, setDrag] = useState({ active: false, startX: 0, offset: 0 })
+  const [drag, setDrag] = useState({ active: false, startX: 0, startY: 0, offset: 0, locked: null })
 
   const sectionRef = useRef(null)
 
@@ -36,26 +39,45 @@ export const GallerySection = forwardRef((_, forwardedRef) => {
   const goTo = i => setIndex(i)
 
   const onPointerDown = e => {
-    setDrag({ active: true, startX: e.clientX, offset: 0 })
+    setDrag({ active: true, startX: e.clientX, startY: e.clientY, offset: 0, locked: null })
     e.currentTarget.setPointerCapture(e.pointerId)
   }
 
   const onPointerMove = e => {
     if (!drag.active) return
-    setDrag(d => ({ ...d, offset: e.clientX - d.startX }))
+    const dx = e.clientX - drag.startX
+    const dy = e.clientY - drag.startY
+
+    // Determine lock direction on first meaningful movement
+    if (drag.locked === null && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+      const isHorizontal = Math.abs(dx) > Math.abs(dy)
+      if (!isHorizontal) {
+        // Vertical scroll intent — release capture so Lenis can scroll
+        e.currentTarget.releasePointerCapture(e.pointerId)
+        setDrag({ active: false, startX: 0, startY: 0, offset: 0, locked: null })
+        return
+      }
+      setDrag(d => ({ ...d, locked: 'h', offset: dx }))
+      return
+    }
+
+    if (drag.locked === 'h') {
+      e.preventDefault()
+      setDrag(d => ({ ...d, offset: dx }))
+    }
   }
 
   const onPointerUp = () => {
     if (!drag.active) return
     if (drag.offset < -50) goTo(Math.min(index + 1, GALLERY_IMAGES.length - 1))
     else if (drag.offset > 50) goTo(Math.max(index - 1, 0))
-    setDrag({ active: false, startX: 0, offset: 0 })
+    setDrag({ active: false, startX: 0, startY: 0, offset: 0, locked: null })
   }
 
   const translateX = centerOffset - index * (SLIDE_W + GAP) + drag.offset
 
   return (
-    <section ref={setRefs} className="flex flex-col items-center justify-center py-16" style={{ overflow: 'hidden' }}>
+    <section ref={setRefs} className="relative flex flex-col items-center justify-center py-16" style={{ overflow: 'hidden' }}>
       <p className="will-reveal text-xs tracking-[0.3em] text-primary mb-1">OUR MEMORIES</p>
       <h2
         className="will-reveal font-im-fell-english-regular-italic text-5xl text-secondary mb-2"
@@ -103,6 +125,10 @@ export const GallerySection = forwardRef((_, forwardedRef) => {
           ))}
         </div>
       </div>
+
+      <img src={flower}      alt="" className="px-mid pointer-events-none absolute top-0 left-0 w-24 md:w-28" />
+      <img src={pinkFlower}  alt="" className="px-slow pointer-events-none absolute bottom-0 right-0 w-24 md:w-28" />
+      <img src={whiteFlower} alt="" className="px-fast pointer-events-none absolute -bottom-40 left-0 w-16 md:w-20 -translate-y-1/2" />
 
       <div className="flex gap-2 mt-5">
         {GALLERY_IMAGES.map((_, i) => (

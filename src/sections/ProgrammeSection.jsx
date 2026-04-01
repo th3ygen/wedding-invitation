@@ -3,7 +3,7 @@ import thing from '../assets/thing.png'
 
 export const ProgrammeSection = forwardRef(({ days }, ref) => (
   <section ref={ref} className="flex flex-col items-center justify-center py-16 bg-cover bg-center gap-8">
-    <div className="will-reveal relative w-[75%] max-w-xs mx-auto">
+    <div className="will-reveal px-slow relative w-[75%] max-w-xs mx-auto">
       <img src={thing} alt="Programme" className="w-full h-auto mb-5" />
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-black">
         <p className="text-lg text-primary mt-5 mb-5 tracking-wider">PROGRAMME</p>

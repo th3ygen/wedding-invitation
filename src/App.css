@@ -239,3 +239,19 @@ p {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ─── PARALLAX ───────────────────────────────────────────────────────────────── */
+/* Uses the CSS individual `translate` property so it composes cleanly with
+   `transform` used by .will-reveal — no conflicts. */
+
+.px-slow {
+  translate: 0 calc(-1 * var(--px-slow, 0px));
+}
+
+.px-mid {
+  translate: 0 calc(-1 * var(--px-mid, 0px));
+}
+
+.px-fast {
+  translate: 0 calc(-1 * var(--px-fast, 0px));
+}

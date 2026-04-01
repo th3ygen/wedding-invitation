@@ -70,7 +70,13 @@ function App() {
       })
     }
 
-lenis.on('scroll', () => checkReveals())
+    lenis.on('scroll', ({ scroll }) => {
+      checkReveals()
+      const r = document.documentElement.style
+      r.setProperty('--px-slow', `${scroll * 0.05}px`)
+      r.setProperty('--px-mid',  `${scroll * 0.12}px`)
+      r.setProperty('--px-fast', `${scroll * 0.22}px`)
+    })
 
     let rafId
     const raf = time => { lenis.raf(time); rafId = requestAnimationFrame(raf) }
