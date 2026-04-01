@@ -1,7 +1,13 @@
-import { useState, useEffect, forwardRef } from 'react'
+import { useState, useEffect, useRef, useCallback, forwardRef } from 'react'
 import { fetchWishes } from '../api/wishes'
 
-export const UcapanSection = forwardRef(({ onWriteClick, onRSVPClick }, ref) => {
+export const UcapanSection = forwardRef(({ onWriteClick, onRSVPClick }, forwardedRef) => {
+  const sectionRef = useRef(null)
+  const setRef = useCallback(node => {
+    sectionRef.current = node
+    if (typeof forwardedRef === 'function') forwardedRef(node)
+    else if (forwardedRef) forwardedRef.current = node
+  }, [forwardedRef])
   const DUMMY_WISHES = [
     { name: 'Farah & Hafiz', message: 'Semoga perkahwinan Azim & Nia diberkati Allah dan kekal bahagia hingga ke syurga. Tahniah!' },
     { name: 'Auntie Rohani', message: 'Moga rumah tangga yang dibina penuh kasih sayang, harmoni dan dipanjangkan rezeki. Selamat pengantin baru!' },
@@ -12,14 +18,32 @@ export const UcapanSection = forwardRef(({ onWriteClick, onRSVPClick }, ref) => 
 
   const [wishes, setWishes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [inView, setInView] = useState(false)
+
+  // Poll via rAF until section is visually in viewport (works with Lenis transforms)
+  useEffect(() => {
+    let rafId
+    const check = () => {
+      if (!sectionRef.current) { rafId = requestAnimationFrame(check); return }
+      const rect = sectionRef.current.getBoundingClientRect()
+      if (rect.top < window.innerHeight * 0.9) {
+        setInView(true)
+      } else {
+        rafId = requestAnimationFrame(check)
+      }
+    }
+    rafId = requestAnimationFrame(check)
+    return () => cancelAnimationFrame(rafId)
+  }, [])
 
   useEffect(() => {
+    if (!inView) return
     const t = setTimeout(() => {
       setWishes(DUMMY_WISHES)
       setLoading(false)
     }, 5000)
     return () => clearTimeout(t)
-  }, [])
+  }, [inView])
   const STORAGE_KEY = 'wedding_liked_wishes'
   // TODO: when switching to real data, replace index key `i` with the actual message ID (e.g. w.id)
   //       so liked state survives list reorders
@@ -69,7 +93,7 @@ export const UcapanSection = forwardRef(({ onWriteClick, onRSVPClick }, ref) => 
   // }, [])
 
   return (
-    <section ref={ref} className="flex flex-col items-center justify-start px-4 pt-16 pb-[90px]">
+    <section ref={setRef} className="flex flex-col items-center justify-start px-4 pt-16 pb-[90px]">
       <div className="flex flex-col gap-3 w-full max-w-xs mb-20 shrink-0 items-center">
         <button onClick={onWriteClick}
           className="w-[75%] py-3 rounded-full text-sm text-white tracking-widest"
